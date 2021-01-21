@@ -1,3 +1,73 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.core.validators import  MinValueValidator 
+from enum import Enum
+from datetime import datetime
+from django.utils.translation import gettext as _
 
-# Create your models here.
+from pizza_backend.users.models import User
+
+from filer.fields.image import FilerImageField
+
+
+class Resturant(models.Model):
+    name = models.CharField(_("Device Name"), max_length=100, blank=False, null=False, help_text="Device Name", default='')
+    owner = models.ForeignKey(User, related_name='shops', on_delete=models.CASCADE)
+    image = FilerImageField(null=True, blank=True, related_name="resturant_image", on_delete=models.CASCADE, help_text="Upload/Select image for this resturant")
+    lon = models.FloatField(_("Longitude"), blank=True, default=0.0)
+    loc = models.PointField(_("Location"), srid=4326, geography=True, dim=2, null=True, blank=True, editable=False)
+    created_date = models.DateTimeField(auto_now=False, auto_now_add=True)
+    updated_date = models.DateTimeField(auto_now=True, auto_now_add=False)
+
+    class Meta:
+        verbose_name_plural = "Resturants"
+
+    def __str__(self):
+        return self.name
+
+
+
+class Pizza(models.Model):
+    class AVAILABLE(Enum):
+        yes = ('yes', 'yes')
+        no = ('no', 'no')
+        @classmethod
+        def get_value(cls, member):
+            return cls[member].value[0]
+    name = models.CharField(max_length=250, unique=True)
+    resturant = models.ForeignKey(Resturant, related_name='pizzas', on_delete=models.CASCADE)
+    status = models.CharField(max_length=2,choices=[x.value for x in AVAILABLE], default='yes')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+
+
+class Order(models.Model):
+    class STATUS(Enum):
+        pending = ('pe', 'pending')
+        delivered = ('de', 'delivered')
+        @classmethod
+        def get_value(cls, member):
+            return cls[member].value[0]
+
+    class SIZES(Enum):
+        small = ('sm', 'small')
+        medium = ('md', 'medium')
+        large = ('lg', 'large')
+        @classmethod
+        def get_value(cls, member):
+            return cls[member].value[0]
+    pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
+    size = models.CharField(max_length=2,choices=[x.value for x in SIZES], default='md')
+    count = models.PositiveIntegerField(default=1,blank=False, validators=[MinValueValidator(1)])
+    customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    status = models.CharField(max_length=2,choices=[x.value for x in STATUS], default='pe')
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)
+    updated_at = models.DateTimeField(auto_now=True)
+    def __str__(self):
+        return self.pizza.name
+
+
