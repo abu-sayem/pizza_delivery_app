@@ -3,8 +3,9 @@ from django.db import models
 from django.core.validators import  MinValueValidator 
 from enum import Enum
 from datetime import datetime
+from uuid import uuid4
 from django.utils.translation import gettext as _
-
+from django.shortcuts import reverse
 from pizza_backend.users.models import User
 
 from filer.fields.image import FilerImageField
@@ -60,14 +61,18 @@ class Order(models.Model):
         @classmethod
         def get_value(cls, member):
             return cls[member].value[0]
+    id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
     pizza = models.ForeignKey(Pizza, on_delete=models.CASCADE)
     size = models.CharField(max_length=2,choices=[x.value for x in SIZES], default='md')
     count = models.PositiveIntegerField(default=1,blank=False, validators=[MinValueValidator(1)])
     customer = models.ForeignKey(User, on_delete=models.CASCADE)
+    delivery_address = models.CharField(max_length=255)
     status = models.CharField(max_length=2,choices=[x.value for x in STATUS], default='pe')
     created_at = models.DateTimeField(auto_now_add=True, db_index=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self):
         return self.pizza.name
 
-
+    def order_detail(self):
+        return reverse('pizza:pizza_detail', kwargs={'pizza_id': self.id})
