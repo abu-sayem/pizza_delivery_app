@@ -1,11 +1,11 @@
 from django.urls import path
 from rest_framework.routers import DefaultRouter
-from .apiviews import  OrderViewSet, PizzaViewSet
+from .views import  OrderViewSet, PizzaViewSet
 
 
 router = DefaultRouter()
 router.register('orders', OrderViewSet, basename='orders')
-router.register('pizzas', PizzaViewSet, basename='pizzas')
+router.register('', PizzaViewSet, basename='pizzas')
 
 """
 /order/
