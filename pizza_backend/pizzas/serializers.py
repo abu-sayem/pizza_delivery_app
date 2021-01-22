@@ -1,15 +1,21 @@
 from rest_framework import serializers
 
-from .models import Order, Pizza
+from .models import Order, Pizza, Resturant
 
 
-from pizza_backend.users.models import User
+from users.models import User
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ['id', 'username',]
+
+
+class ResturantSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Resturant
+        fields = ['name', 'owner','photo', 'lon', 'lat']
 
 class PizzaSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:

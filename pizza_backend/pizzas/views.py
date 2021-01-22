@@ -6,7 +6,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
-from rest_framework import viewsets
+from rest_framework import viewsets, permissions
 
 from .models import Order, Pizza
 from  .serializers import OrderSerializer, PizzaSerializer, OrderSerializerCreateRetrive
@@ -19,6 +19,7 @@ class PizzaViewSet(viewsets.ModelViewSet):
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.all()
+    permission_classes = (permissions.IsAuthenticated,)
     def get_queryset(self):
         queryset = Order.objects.all()
         customer_id = self.request.query_params.get('customer_id', None)
