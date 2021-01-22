@@ -8,6 +8,7 @@ from django.conf import settings
 
 class User(AbstractUser):
     id = models.UUIDField(primary_key=True, default=uuid4, editable=False)
+    username =  models.CharField(max_length=150, blank=True, null=True, help_text="User Name")
     email = models.EmailField(max_length=254, unique=True)
 
     USERNAME_FIELD = 'email'
