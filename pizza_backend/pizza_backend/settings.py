@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'dj_rest_auth',
 
     'users.apps.UsersConfig',
+    'pizzas.apps.PizzasConfig'
 ]
 
 #EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -121,13 +122,23 @@ ASGI_APPLICATION = 'pizza_backend.routing.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.contrib.gis.db.backends.postgis',#'django.db.backends.postgresql',
+        'NAME': os.getenv('PGDATABASE', 'sample_database'),
+        'USER': os.getenv('PGUSER', 'sample_user'),
+        'PASSWORD': os.getenv('PGPASSWORD', 'sample_password'),
+        'HOST': os.getenv('PGHOST', 'localhost'),
+        'PORT': os.getenv('PGPORT', '5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
