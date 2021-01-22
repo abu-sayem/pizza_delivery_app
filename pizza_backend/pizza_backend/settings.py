@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -37,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
+    'channels',
     'rest_framework',
     'rest_framework.authtoken',
     'rest_auth',
@@ -83,7 +84,9 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'pizza_backend.wsgi.application'
+
+ASGI_APPLICATION = 'pizza_backend.routing.application'
+#WSGI_APPLICATION = 'pizza_backend.wsgi.application'
 
 
 # Database
@@ -138,3 +141,15 @@ STATIC_URL = '/static/'
 
 # Phone number validation regex
 PHONE_VALIDATION_REGEX = r'^\+88\d{11}$' #r'^(\+\d{1,3})?,?\s?\d{8,13}$'
+
+REDIS_URL = os.getenv('REDIS_URL', 'redis://localhost:6379')
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [REDIS_URL],
+        },
+    },
+}
+
