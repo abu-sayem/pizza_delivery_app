@@ -6,6 +6,9 @@ from django.db import close_old_connections
 from channels.auth import AuthMiddlewareStack
 from rest_framework_simplejwt.tokens import AccessToken
 
+
+User = get_user_model()
+
 class TokenAuthMiddleware:
     def __init__(self, inner):
         self.inner = inner
