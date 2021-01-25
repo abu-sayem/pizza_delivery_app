@@ -6,7 +6,7 @@ class PizzaAdmin(admin.ModelAdmin):
 admin.site.register(Pizza, PizzaAdmin)
 
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('pizza','size', 'count', 'customer','delivery_address', 'status')
+    list_display = ('pizza','size', 'count', 'customer', 'delivery_man', 'delivery_address', 'status')
     list_filter = ('status',)
     readonly_fields = ('id', 'created_at', 'created_at',)
 admin.site.register(Order, OrderAdmin)
