@@ -1,10 +1,18 @@
 
 from django.urls import include, path
 from django.contrib import admin
-from . import views
 from rest_framework_simplejwt import views as jwt_views
 
 from allauth.account.views import ConfirmEmailView
+
+from rest_framework.routers import DefaultRouter
+from .views import UserViewSet
+
+
+
+router = DefaultRouter()
+router.register('users', UserViewSet, basename='users')
+
 
 '''
 /auth/login/ (POST)
@@ -27,6 +35,9 @@ urlpatterns = [
     path('registration/', include('dj_rest_auth.registration.urls')),
     path('admin/', admin.site.urls),
     path('sign_up/', include('dj_rest_auth.registration.urls')),
-    path('', include('dj_rest_auth.urls')),
+    #path('', include('dj_rest_auth.urls')),
     #path('', views.UserListView.as_view()),
 ]
+
+
+urlpatterns += router.urls
