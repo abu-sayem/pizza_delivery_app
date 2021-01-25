@@ -116,7 +116,7 @@ AUTHENTICATION_BACKENDS = (
 
 
 ASGI_APPLICATION = 'pizza_backend.routing.application'
-#WSGI_APPLICATION = 'pizza_backend.wsgi.application'
+WSGI_APPLICATION = 'pizza_backend.wsgi.application'
 
 
 # Database
@@ -131,7 +131,7 @@ ASGI_APPLICATION = 'pizza_backend.routing.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.contrib.gis.db.backends.postgis',#'django.db.backends.postgresql',
+        'ENGINE': 'django.db.backends.postgresql', # 'django.contrib.gis.db.backends.postgis',
         'NAME': os.getenv('PGDATABASE', 'sample_database'),
         'USER': os.getenv('PGUSER', 'sample_user'),
         'PASSWORD': os.getenv('PGPASSWORD', 'sample_password'),
