@@ -205,3 +205,10 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': datetime.timedelta(days=1),
     'USER_ID_CLAIM': 'id',
 }
+
+
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER': 'users.serializers.CustomRegistrationSerializer',
+}
+
+ACCOUNT_ADAPTER = 'users.adapter.CustomAccountAdapter'
